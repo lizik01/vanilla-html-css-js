@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- SEO basics -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Vanilla HTML + CSS + JS Practice Page</title>
+
+  <!-- SEO-important meta/header tags -->
+  <meta name="description" content="Practice page for vanilla HTML, CSS, and JS: layout, box model, typography units, positioning, and a simple interaction." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://example.com/vanilla-practice" />
+
+  <!-- Open Graph (social/SEO-ish) -->
+  <meta property="og:title" content="Vanilla HTML + CSS + JS Practice Page" />
+  <meta property="og:description" content="A single-page practice assignment showing core HTML/CSS/JS concepts." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    /* ====== Basic page styling ====== */
+    :root {
+      --bg: #0b1020;
+      --card: #111a33;
+      --text: #e9ecf3;
+      --muted: #aeb6cc;
+      --accent: #7aa2ff;
+      --border: rgba(255,255,255,0.12);
+      --shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 700px at 10% 0%, rgba(122,162,255,0.25), transparent 60%),
+                  radial-gradient(900px 600px at 100% 20%, rgba(92, 220, 173, 0.18), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+    }
+
+    /* Make footer stay at the bottom even when content is short */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1; /* pushes footer down */
+      width: min(1000px, 92vw);
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+
+    /* ====== Navbar ====== */
+    .navbar {
+      position: sticky; /* positioning #1: sticky */
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: rgba(11, 16, 32, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      width: min(1000px, 92vw);
+      margin: 0 auto;
+      padding: 14px 0;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 12px;
+      font-size: 0.95rem;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ====== Cards/sections ====== */
+    .card {
+      background: rgba(17, 26, 51, 0.75);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 14px;
+      padding: 18px 18px;
+      margin: 16px 0;
+    }
+    h1 { margin: 8px 0 4px; font-size: 2rem; }
+    h2 { margin: 0 0 10px; font-size: 1.35rem; }
+    p { margin: 8px 0; color: var(--muted); line-height: 1.55; }
+    code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 6px; }
+
+    .pill {
+      display: inline-block;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      margin: 4px 6px 0 0;
+    }
+
+    /* ====== 3x3 layout WITHOUT table, WITHOUT css grid/flex ====== */
+    /* Use inline-block + fixed percentage width; only div/span used in HTML */
+    .nine-grid {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      background: rgba(255,255,255,0.04);
+      font-size: 0; /* remove inline-block whitespace gaps */
+    }
+    .cell {
+      display: inline-block;
+      width: 33.3333%;
+      padding: 12px;
+      font-size: 14px; /* reset */
+      vertical-align: top;
+    }
+    .cell > span {
+      display: block;
+      border: 1px dashed rgba(255,255,255,0.25);
+      border-radius: 10px;
+      padding: 14px;
+      min-height: 60px;
+      background: rgba(122,162,255,0.06);
+      color: var(--text);
+    }
+
+    /* ====== Box model gallery ====== */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .bm-card {
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      padding: 10px;
+      border: 1px solid var(--border);
+    }
+    .bm-title {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .bm-demo {
+      background: rgba(122,162,255,0.08);
+      color: var(--text);
+      border-radius: 10px;
+    }
+
+    /* 3 rows: change border/margin/padding values */
+    /* columns vary 0 / 5 / 10 */
+    .r1c1 .bm-demo { border: 0px solid #fff; margin: 0px; padding: 0px; }
+    .r1c2 .bm-demo { border: 0px solid #fff; margin: 5px; padding: 5px; }
+    .r1c3 .bm-demo { border: 0px solid #fff; margin: 10px; padding: 10px; }
+
+    .r2c1 .bm-demo { border: 2px solid rgba(255,255,255,0.35); margin: 0px; padding: 0px; }
+    .r2c2 .bm-demo { border: 2px solid rgba(255,255,255,0.35); margin: 5px; padding: 5px; }
+    .r2c3 .bm-demo { border: 2px solid rgba(255,255,255,0.35); margin: 10px; padding: 10px; }
+
+    .r3c1 .bm-demo { border: 6px solid rgba(92, 220, 173, 0.35); margin: 0px; padding: 0px; }
+    .r3c2 .bm-demo { border: 6px solid rgba(92, 220, 173, 0.35); margin: 5px; padding: 5px; }
+    .r3c3 .bm-demo { border: 6px solid rgba(92, 220, 173, 0.35); margin: 10px; padding: 10px; }
+
+    .bm-demo p {
+      margin: 0;
+      padding: 10px; /* internal content padding to make it readable; doesn't change the assignment concept */
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    /* ====== Creative positioning area (4 positioning types) ====== */
+    .position-stage {
+      position: relative; /* anchor for absolute children */
+      height: 220px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      overflow: hidden;
+    }
+
+    /* positioning #2: relative */
+    .pos-relative {
+      position: relative;
+      top: 10px;
+      left: 10px;
+      width: 220px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(122,162,255,0.10);
+      font-size: 0.9rem;
+    }
+
+    /* positioning #3: absolute */
+    .pos-absolute {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      width: 240px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(92, 220, 173, 0.10);
+      font-size: 0.9rem;
+    }
+
+    /* positioning #4: fixed (a small helper badge) */
+    .fixed-badge {
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      border: 1px solid var(--border);
+      background: rgba(17,26,51,0.85);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn:hover { border-color: rgba(255,255,255,0.22); }
+
+    /* Footer bottom */
+    footer {
+      border-top: 1px solid var(--border);
+      background: rgba(11,16,32,0.8);
+    }
+    .footer-inner {
+      width: min(1000px, 92vw);
+      margin: 0 auto;
+      padding: 16px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .footer-inner strong { color: var(--text); }
+
+    /* Small screens */
+    @media (max-width: 740px) {
+      .gallery { grid-template-columns: 1fr; }
+      .cell { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="brand">Vanilla Web Practice</div>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#tags">Useful Tags</a>
+        <a href="#seo">SEO Headers</a>
+        <a href="#grid">3x3 Grid</a>
+        <a href="#css">CSS Tasks</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Main header + 4 subheaders/sections -->
+    <h1>HTML + CSS + JS Self-Assessment Page</h1>
+    <p>
+      This single page includes: navbar, main content, a 3x3 layout made only with <code>div</code> and <code>span</code>,
+      a box-model gallery, font-size unit examples, creative positioning demos, and a small JS interaction.
+    </p>
+
+    <!-- Section 1: 10 useful tags -->
+    <section id="tags" class="card">
+      <h2>1) Ten useful HTML tags (with quick notes)</h2>
+      <div>
+        <span class="pill">&lt;div&gt; (generic container)</span>
+        <span class="pill">&lt;span&gt; (inline container)</span>
+        <span class="pill">&lt;header&gt; (page/section header)</span>
+        <span class="pill">&lt;nav&gt; (navigation links)</span>
+        <span class="pill">&lt;main&gt; (main content)</span>
+        <span class="pill">&lt;section&gt; (group content by topic)</span>
+        <span class="pill">&lt;article&gt; (independent piece)</span>
+        <span class="pill">&lt;footer&gt; (footer info)</span>
+        <span class="pill">&lt;a&gt; (links)</span>
+        <span class="pill">&lt;img&gt; (images)</span>
+      </div>
+      <p>
+        These are the tags I use most often for layout, meaning/structure, and navigation.
+      </p>
+    </section>
+
+    <!-- Section 2: SEO research -->
+    <section id="seo" class="card">
+      <h2>2) SEO: important “header/meta” tags to add</h2>
+      <p>
+        SEO basics for a page often includes a clear title, useful description, proper headings, and social preview metadata.
+        Here is a practical list:
+      </p>
+      <ul>
+        <li><strong>&lt;title&gt;</strong> — sets the page title shown in browser tab and search results.</li>
+        <li><strong>&lt;meta name="description"&gt;</strong> — summary shown in search snippets.</li>
+        <li><strong>&lt;meta name="robots"&gt;</strong> — indexing rules (e.g. <code>index,follow</code>).</li>
+        <li><strong>&lt;link rel="canonical"&gt;</strong> — avoids duplicate-content issues by defining the “main” URL.</li>
+        <li><strong>Heading tags: &lt;h1&gt;…&lt;h6&gt;</strong> — content hierarchy. Usually one <code>h1</code> per page, then <code>h2</code> for sections.</li>
+        <li><strong>Open Graph tags (og:title / og:description)</strong> — helps link previews on social platforms.</li>
+        <li><strong>&lt;meta name="viewport"&gt;</strong> — mobile friendliness (important for usability + ranking signals).</li>
+      </ul>
+      <p>
+        In this page, you can check the <code>&lt;head&gt;</code> section to see these tags included.
+      </p>
+    </section>
+
+    <!-- Section 3: 3x3 without table or CSS grid/flex -->
+    <section id="grid" class="card">
+      <h2>3) 3x3 grid layout using only divs/spans (no table, no CSS grid/flex)</h2>
+      <p>
+        The layout below is a 3x3 made with inline-block cells. HTML uses only <code>div</code> and <code>span</code>.
+      </p>
+
+      <div class="nine-grid" aria-label="3x3 grid">
+        <div class="cell"><span>Cell 1</span></div>
+        <div class="cell"><span>Cell 2</span></div>
+        <div class="cell"><span>Cell 3</span></div>
+
+        <div class="cell"><span>Cell 4</span></div>
+        <div class="cell"><span>Cell 5</span></div>
+        <div class="cell"><span>Cell 6</span></div>
+
+        <div class="cell"><span>Cell 7</span></div>
+        <div class="cell"><span>Cell 8</span></div>
+        <div class="cell"><span>Cell 9</span></div>
+      </div>
+    </section>
+
+    <!-- Section 4: CSS tasks -->
+    <section id="css" class="card">
+      <h2>4) CSS tasks: Box model, font sizes, and positioning</h2>
+
+      <!-- Box model gallery -->
+      <h3 style="margin-top:10px;">4a) Box model gallery (rows vary border/margin/padding; cols 0 / 5 / 10)</h3>
+      <p>Each cell demonstrates different <strong>border / margin / padding</strong> values.</p>
+
+      <div class="gallery">
+        <div class="bm-card r1c1">
+          <div class="bm-title">Row 1: border 0px — Col 1: m/p 0px</div>
+          <div class="bm-demo"><p>Border:0, Margin:0, Padding:0</p></div>
+        </div>
+        <div class="bm-card r1c2">
+          <div class="bm-title">Row 1: border 0px — Col 2: m/p 5px</div>
+          <div class="bm-demo"><p>Border:0, Margin:5, Padding:5</p></div>
+        </div>
+        <div class="bm-card r1c3">
+          <div class="bm-title">Row 1: border 0px — Col 3: m/p 10px</div>
+          <div class="bm-demo"><p>Border:0, Margin:10, Padding:10</p></div>
+        </div>
+
+        <div class="bm-card r2c1">
+          <div class="bm-title">Row 2: border 2px — Col 1: m/p 0px</div>
+          <div class="bm-demo"><p>Border:2, Margin:0, Padding:0</p></div>
+        </div>
+        <div class="bm-card r2c2">
+          <div class="bm-title">Row 2: border 2px — Col 2: m/p 5px</div>
+          <div class="bm-demo"><p>Border:2, Margin:5, Padding:5</p></div>
+        </div>
+        <div class="bm-card r2c3">
+          <div class="bm-title">Row 2: border 2px — Col 3: m/p 10px</div>
+          <div class="bm-demo"><p>Border:2, Margin:10, Padding:10</p></div>
+        </div>
+
+        <div class="bm-card r3c1">
+          <div class="bm-title">Row 3: border 6px — Col 1: m/p 0px</div>
+          <div class="bm-demo"><p>Border:6, Margin:0, Padding:0</p></div>
+        </div>
+        <div class="bm-card r3c2">
+          <div class="bm-title">Row 3: border 6px — Col 2: m/p 5px</div>
+          <div class="bm-demo"><p>Border:6, Margin:5, Padding:5</p></div>
+        </div>
+        <div class="bm-card r3c3">
+          <div class="bm-title">Row 3: border 6px — Col 3: m/p 10px</div>
+          <div class="bm-demo"><p>Border:6, Margin:10, Padding:10</p></div>
+        </div>
+      </div>
+
+      <!-- Font sizes list with inline styling -->
+      <h3 style="margin-top:18px;">4b) Same text, 6 font sizes (inline styles; mix absolute + relative units)</h3>
+      <p>Each list item explains when you would use that unit with a simple example.</p>
+
+      <ol>
+        <li style="font-size: 12px;">
+          <strong>12px</strong> (absolute): Use for small UI labels where you want exact control.
+          Example: tiny captions under icons.
+        </li>
+        <li style="font-size: 16pt;">
+          <strong>16pt</strong> (absolute, print-friendly): Use when designing for print/PDF-like layouts.
+          Example: printable resume text size.
+        </li>
+        <li style="font-size: 1rem;">
+          <strong>1rem</strong> (relative to root): Use for consistent sizing across the page.
+          Example: base body text that adapts if the user changes default font size.
+        </li>
+        <li style="font-size: 1.25em;">
+          <strong>1.25em</strong> (relative to parent): Use for components that scale with their container.
+          Example: a card title that grows if the card’s font size changes.
+        </li>
+        <li style="font-size: 4vw;">
+          <strong>4vw</strong> (relative to viewport width): Use for responsive hero headings.
+          Example: big landing-page header that scales on different screen widths.
+        </li>
+        <li style="font-size: 120%;">
+          <strong>120%</strong> (relative percentage): Use for slight emphasis relative to current size.
+          Example: make a warning message 120% of the surrounding paragraph.
+        </li>
+      </ol>
+
+      <!-- Positioning creative part -->
+      <h3 style="margin-top:18px;">4c) Creative positioning: 4 different position options</h3>
+      <p>
+        This stage shows <code>sticky</code> (navbar), <code>relative</code>, <code>absolute</code>, and <code>fixed</code> (badge).
+        Footer stays at bottom using flex layout on <code>body</code>.
+      </p>
+
+      <div class="position-stage">
+        <div class="pos-relative">
+          <strong>Relative</strong>: nudges an element from its normal spot.<br/>
+          Use for small adjustments without removing it from document flow.
+        </div>
+
+        <div class="pos-absolute">
+          <strong>Absolute</strong>: positions inside a relative container.<br/>
+          Use for overlays, badges, corner labels, tooltips.
+        </div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <button class="btn" id="toggleBadgeBtn">Toggle fixed badge (JS)</button>
+        <span id="jsStatus" style="margin-left:10px; color: var(--muted);">Badge is ON</span>
+      </div>
+    </section>
+  </main>
+
+  <div class="fixed-badge" id="fixedBadge">
+    Fixed badge (position: fixed)
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div><strong>Footer</strong> — Stays at bottom using body flex + main flex:1</div>
+      <div>© 2026 Vanilla Practice</div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple JS interaction: toggle the fixed badge
+    const btn = document.getElementById("toggleBadgeBtn");
+    const badge = document.getElementById("fixedBadge");
+    const status = document.getElementById("jsStatus");
+
+    btn.addEventListener("click", () => {
+      const isHidden = badge.style.display === "none";
+      badge.style.display = isHidden ? "inline-block" : "none";
+      status.textContent = isHidden ? "Badge is ON" : "Badge is OFF";
+    });
+
+    // Optional: highlight active nav section while scrolling (simple vanilla JS)
+    const links = document.querySelectorAll(".nav-links a");
+    const sections = ["tags", "seo", "grid", "css"].map(id => document.getElementById(id));
+
+    window.addEventListener("scroll", () => {
+      let current = "tags";
+      for (const sec of sections) {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= 120) current = sec.id;
+      }
+      links.forEach(a => {
+        a.style.color = a.getAttribute("href") === "#" + current ? "var(--text)" : "var(--muted)";
+      });
+    });
+  </script>
+</body>
+</html>
